@@ -17,7 +17,7 @@ class ItemController extends Controller
         $item = Item::create($validatedData);
 
         // Return success response
-        return response()->json(['message' => 'Item created successfully', 'data' => $item], Response::HTTP_CREATED);
+        return response()->json($item, Response::HTTP_CREATED);
     }
 
     public function index()
@@ -26,6 +26,6 @@ class ItemController extends Controller
         $items = Item::paginate(25);
 
         // Return success response
-        return response()->json(['message' => 'Items retrieved successfully', 'data' => $items], Response::HTTP_OK);
+        return response()->json($items, Response::HTTP_OK);
     }
 }

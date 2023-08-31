@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "a92f698f-be3a-49e7-a897-d3bb0d3211c3",
+		"name": "game-items-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27743944"
+	},
+	"item": [
+		{
+			"name": "Get items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Data is an array with at least one element\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.data).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.be.an('array');",
+							"",
+							"    responseData.data.forEach(function (item) {",
+							"        pm.expect(item.id).to.exist;",
+							"        pm.expect(item.id).to.be.a('number');",
+							"        pm.expect(item.id).to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.data).to.be.an('array').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"    responseData.data.forEach(function (item) {",
+							"        pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/v1/items?page=1",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"v1",
+						"items"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add item (profanity, link, img)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Description is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.description).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Price is a non-negative number\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.price).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.price).to.be.at.least(0);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"sex lorem pissed\",\n    \"description\": \"leo pissed, at tempus nisi ac. Donec <img src=\\\"https://storage.googleapis.com/kaggle-datasets-images/13808/18616/77d1780d62af9994f7a9d0acd7ba7293/dataset-cover.jpg?t=2018-02-21-21-42-49\\\" alt=\\\"Cover image\\\" class=\\\"sc-eYjxJN hiWsPJ\\\"> nulla urna, faucibus at vehicula a, tempus vitae https://www.kaggle.com/datasets/nicapotato/bad-bad-words?resource=download sapien\",\n    \"price\": 19.99,\n    \"game_name\": \"Some Game\",\n    \"game_website\": \"http://example.com/game\",\n    \"discount_price\": 15.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/v1/items",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"v1",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add item (without discount)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Price is a non-negative number\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.price).to.be.a('number');",
+							"    pm.expect(responseData.price).to.be.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"game_name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.game_name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"game_website is a valid URL\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.game_website).to.match(/^https?:\\/\\/[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*$/, \"game_website should be a valid URL\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"sex lorem pissed\",\n    \"description\": \"leo pissed, at tempus nisi ac. Donec nulla urna, faucibus at vehicula a, tempus vitae sapien\",\n    \"price\": 35.20,\n    \"game_name\": \"Some Greedy Game\",\n    \"game_website\": \"http://example.com/game\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/v1/items",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"v1",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add item (invalid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 422\", function () {",
+							"    pm.expect(pm.response.code).to.equal(422);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Error message is not empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.message).to.exist.and.to.not.be.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate error fields are present\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.errors).to.exist;",
+							"",
+							"    const errorFields = [\"name\", \"description\", \"game_website\", \"discount_price\"];",
+							"    errorFields.forEach(function (field) {",
+							"        pm.expect(responseData.errors[field]).to.exist;",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Each error field has a non-empty error message\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.errors).to.exist.and.to.be.an('object');",
+							"",
+							"    Object.keys(responseData.errors).forEach(function (key) {",
+							"        pm.expect(responseData.errors[key]).to.exist.and.to.have.lengthOf.at.least(1, \"Error message should not be empty\");",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"\",\n    \"price\": 10000000,\n    \"game_name\": \"Best game\",\n    \"game_website\": {\n        \"url\": \"http://localhost:3000\"\n    },\n    \"discount_price\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/v1/items",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"v1",
+						"items"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "http://localhost/api",
+			"type": "string"
+		}
+	]
+}
